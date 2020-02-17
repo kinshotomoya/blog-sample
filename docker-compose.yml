@@ -38,6 +38,7 @@ services:
       dockerfile: Dockerfile-fluentd
     volumes:
       - ./_fluentd/etc:/fluentd/etc
+      # nginxコンテナの設定でやっているように、nginxlogディレクトリをコンテナ内のnginxディレクトリと同期させる
       - nginxlog:/var/log/nginx:ro
     environment:
       - FLUENTD_CONF=fluent.conf
@@ -47,6 +48,8 @@ services:
     image: nginx:1.11
     volumes:
       - ./_nginx/etc/nginx.conf:/etc/nginx/nginx.conf:ro
+      # コンテナ内のnginxディレクトリをローカルのnginxlogディレクトリとして認識させる
+      # nginxの設定、アクセスログは/var/log/nginx以下に吐き出されるようになっている
       - nginxlog:/var/log/nginx
     ports:
       - 80:80
